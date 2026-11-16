@@ -1,0 +1,24 @@
+name: gate
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: the coverage kernel, the lock check and the page's promises — tests
+        run: node --test kernel.test.mjs guarded.test.mjs page-parity.test.mjs
+      - name: the page holds the gated kernel byte for byte
+        run: node tools/inline.mjs --check
+      # Pinned. An unpinned gate is a gate somebody else can change.
+      - name: witness — every mutant of the kernel and of the lock check must die
+        run: |
+          git clone --depth 1 --branch v0.6 https://github.com/sjgant80-hub/witness.git /tmp/witness
+          for pair in "kernel.mjs kernel.test.mjs" "tools/guarded.mjs guarded.test.mjs"; do
+            set -- $pair
+            node /tmp/witness/witness.mjs mutate "$1" --timeout 60000 --cap 100000 --test node --test "$2" > gate.out 2>&1 || true
+            node -e "const b=require('fs').readFileSync('gate.out','utf8');const j=JSON.parse(b.slice(b.indexOf('{'),b.lastIndexOf('}')+1));if(j.clean!==true||j.killed!==j.total||!(j.total>0)){console.error('::error::witness not clean on $1: '+j.killed+'/'+j.total);process.exit(1)}console.log('witness CLEAN $1 '+j.killed+'/'+j.total)"
+          done
+      - name: every tool the map claims answers live, loads no outside script, and the locked pages stay locked
+        run: node tools/receipts.mjs

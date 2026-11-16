@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sovereign AI-Security</title>
+<meta name="description" content="Sovereign AI-Security from AI Native Solutions: defensive tools that secure the agentic attack surface — messages, tool calls, AI-written code and AI output — on your own machines, with every claim re-runnable and the failures published.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --ink: #121821; --ink-2: #3b4656; --ink-3: #66717f; --line: #d9dee5;
+  --accent: #0f6c5f; --accent-soft: #e2f2ee; --built: #11734f; --partial: #9a6200; --next: #5b6472;
+  --built-bg: #e3f4ec; --partial-bg: #fbf0dc; --next-bg: #eceef1; --warn: #a33a2c;
+  --mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1016; --panel: #111923; --ink: #e8edf2; --ink-2: #b4bfcb; --ink-3: #8794a3; --line: #233040;
+    --accent: #5fd3bf; --accent-soft: #10302b; --built: #63d69e; --partial: #f0b54a; --next: #9aa5b2;
+    --built-bg: #10291e; --partial-bg: #2e2412; --next-bg: #1a222c; --warn: #f08a7a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1016; --panel: #111923; --ink: #e8edf2; --ink-2: #b4bfcb; --ink-3: #8794a3; --line: #233040;
+  --accent: #5fd3bf; --accent-soft: #10302b; --built: #63d69e; --partial: #f0b54a; --next: #9aa5b2;
+  --built-bg: #10291e; --partial-bg: #2e2412; --next-bg: #1a222c; --warn: #f08a7a;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); }
+a { color: var(--accent); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+header.top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; gap: 16px; min-height: 54px; }
+.brand { font-weight: 700; letter-spacing: .01em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+nav.sections { margin-left: auto; display: flex; gap: 14px; flex-wrap: wrap; }
+nav.sections a { color: var(--ink-2); text-decoration: none; font-size: .9rem; white-space: nowrap; }
+nav.sections a:hover { color: var(--accent); }
+#theme { border: 1px solid var(--line); background: var(--panel); color: var(--ink-2); border-radius: 8px; padding: 4px 10px; font: inherit; font-size: .85rem; cursor: pointer; }
+section { padding: 44px 0 8px; }
+h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.12; margin: 18px 0 12px; letter-spacing: -.01em; }
+h2 { font-size: 1.55rem; margin: 0 0 10px; }
+h3 { font-size: 1.08rem; margin: 0 0 6px; }
+.kicker { font: 600 .78rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0; }
+.lede { font-size: 1.12rem; color: var(--ink-2); max-width: 760px; }
+.plain { color: var(--ink-2); max-width: 780px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.steps li { counter-increment: s; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.steps li::before { content: counter(s, decimal-leading-zero); display: block; font: 700 .8rem var(--mono); color: var(--accent); margin-bottom: 6px; }
+.tally { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 6px; }
+.tally span { border-radius: 999px; padding: 4px 12px; font: 600 .85rem var(--mono); }
+.badge { display: inline-block; border-radius: 999px; padding: 2px 10px; font: 600 .74rem var(--mono); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.s-built { background: var(--built-bg); color: var(--built); }
+.s-partial { background: var(--partial-bg); color: var(--partial); }
+.s-next { background: var(--next-bg); color: var(--next); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font: 600 .78rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+td a { white-space: nowrap; }
+.picker { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+.picker button { border: 1px solid var(--line); background: var(--panel); color: var(--ink-2); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .88rem; cursor: pointer; text-align: left; }
+.picker button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+#answer .organ { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+#answer .limit { color: var(--ink-3); font-size: .9rem; }
+#answer .limit b { color: var(--ink-2); }
+.diagram { width: 100%; height: auto; display: block; color: var(--ink); }
+.rules li { margin: 0 0 10px; }
+.note { color: var(--ink-3); font-size: .9rem; }
+.cta { display: inline-block; background: var(--accent); color: var(--bg); text-decoration: none; font-weight: 600; border-radius: 10px; padding: 10px 18px; margin-top: 8px; }
+footer { border-top: 1px solid var(--line); margin-top: 48px; padding: 24px 0 40px; color: var(--ink-3); font-size: .88rem; }
+footer p { margin: 0 0 8px; max-width: 860px; }
+.mono { font-family: var(--mono); }
+@media (max-width: 780px) { nav.sections { display: none; } }
+@media (max-width: 640px) {
+  section { padding-top: 34px; }
+  th, td { padding: 8px 8px; }
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top">Sovereign AI-Security</a>
+  <nav class="sections" aria-label="Sections">
+    <a href="#map">The map</a><a href="#try">Try it</a><a href="#how">How it works</a><a href="#check">Check it</a><a href="#rules">The rules</a><a href="#roles">For your team</a><a href="#start">Start</a>
+  </nav>
+  <button id="theme" type="button" aria-label="Switch light or dark">Theme</button>
+</div></header>
+
+<main class="wrap" id="top">
+
+<section id="what">
+  <p class="kicker">AI Native Solutions · built by Kar</p>
+  <h1>We secure the agentic attack surface. Provable, owned, and nothing leaves your building.</h1>
+  <p class="lede">AI agents read messages, call tools, write code and produce output your systems trust. Each of those is a new way in. These are defensive tools that check every one of them <b>before</b> it is trusted — on machines you control, with no AI model asked to judge, and with every claim one you can re-run and try to break yourself.</p>
+  <p class="plain"><b>In one line:</b> verify before you trust, on machines you control, and publish what failed. <a href="#check">How to check all of that yourself, without us.</a></p>
+  <div class="tally" id="tally" aria-live="polite"></div>
+  <p class="note" id="tally-line"></p>
+</section>
+
+<section id="start-here">
+  <h2>Start here</h2>
+  <ol class="steps">
+    <li><b>Look at the map below.</b> Each threat says whether it is covered today, partly covered, or not yet — and links to the live tool that covers it.</li>
+    <li><b>Break one yourself.</b> Every covered threat links to a page where the tool runs in your own browser, on your own machine. Paste your own input and try to get something past it: you are testing the real code, not watching a recording, and what you paste is not uploaded.</li>
+    <li><b>Bring us one surface.</b> We measure how it is protected today, then secure it with the right tool and a receipt you can re-run.</li>
+  </ol>
+</section>
+
+<section id="map">
+  <h2>What we already secure, provably</h2>
+  <p class="plain">Every “built” row links to a live, public tool whose tests are broken on purpose and re-run on GitHub’s machines on every change. Nothing is marked built that is not. The last rows are what we have <em>not</em> built yet — named here, claimed for nothing.</p>
+  <div class="card scroll"><table>
+    <thead><tr><th>The threat</th><th>Status</th><th>Covered by</th></tr></thead>
+    <tbody id="map-rows"></tbody>
+  </table></div>
+</section>
+
+<section id="try">
+  <h2>Try it: pick a threat</h2>
+  <p class="plain">Choose what worries you. You get the tool that covers it, what it does, the limit it states, and the page where you can try to break it. This picker runs the same checked code that guards the map above.</p>
+  <div class="picker" id="picker" role="group" aria-label="Threats"></div>
+  <div class="card" id="answer" aria-live="polite"></div>
+</section>
+
+<section id="how">
+  <h2>How it works</h2>
+  <p class="plain">Every tool here follows the same pattern. Nothing an agent receives or produces is trusted because of where it came from. It is checked first, against rules you can read, and either acted on or refused with the reason.</p>
+  <div class="card">
+    <svg class="diagram" viewBox="0 0 960 250" role="img" aria-labelledby="dg-t dg-d">
+      <title id="dg-t">The checking pipeline</title>
+      <desc id="dg-d">Something arrives; it is verified before it is read; it is checked against what is allowed; it is acted on or refused with the reason; every check can be re-run. All of it on your own machines.</desc>
+      <rect x="10" y="10" width="940" height="230" rx="14" fill="none" stroke="currentColor" stroke-opacity=".28" stroke-dasharray="6 6"/>
+      <text x="26" y="34" font-size="13" fill="currentColor" fill-opacity=".7" font-family="ui-monospace, monospace">YOUR MACHINES — nothing is sent to us or to a model provider</text>
+      <g font-family="system-ui, sans-serif" font-size="14" fill="currentColor">
+        <rect x="30" y="70" width="160" height="110" rx="10" fill="none" stroke="currentColor" stroke-opacity=".55"/>
+        <text x="110" y="100" text-anchor="middle" font-weight="700">1 · Arrives</text>
+        <text x="110" y="124" text-anchor="middle" fill-opacity=".8">a message, a tool</text>
+        <text x="110" y="144" text-anchor="middle" fill-opacity=".8">call, a code change,</text>
+        <text x="110" y="164" text-anchor="middle" fill-opacity=".8">an AI answer</text>
+        <rect x="215" y="70" width="170" height="110" rx="10" fill="none" stroke="currentColor" stroke-opacity=".55"/>
+        <text x="300" y="100" text-anchor="middle" font-weight="700">2 · Verified first</text>
+        <text x="300" y="124" text-anchor="middle" fill-opacity=".8">signature, schema,</text>
+        <text x="300" y="144" text-anchor="middle" fill-opacity=".8">hidden characters,</text>
+        <text x="300" y="164" text-anchor="middle" fill-opacity=".8">citations, tests</text>
+        <rect x="410" y="70" width="170" height="110" rx="10" fill="none" stroke="currentColor" stroke-opacity=".55"/>
+        <text x="495" y="100" text-anchor="middle" font-weight="700">3 · Allowed?</text>
+        <text x="495" y="124" text-anchor="middle" fill-opacity=".8">capability, scope,</text>
+        <text x="495" y="144" text-anchor="middle" fill-opacity=".8">budget, expiry,</text>
+        <text x="495" y="164" text-anchor="middle" fill-opacity=".8">normal behaviour</text>
+        <rect x="605" y="70" width="160" height="110" rx="10" fill="none" stroke="currentColor" stroke-opacity=".55"/>
+        <text x="685" y="100" text-anchor="middle" font-weight="700">4 · Act or refuse</text>
+        <text x="685" y="124" text-anchor="middle" fill-opacity=".8">every refusal</text>
+        <text x="685" y="144" text-anchor="middle" fill-opacity=".8">names the check</text>
+        <text x="685" y="164" text-anchor="middle" fill-opacity=".8">that caught it</text>
+        <rect x="790" y="70" width="140" height="110" rx="10" fill="none" stroke="currentColor" stroke-opacity=".55"/>
+        <text x="860" y="100" text-anchor="middle" font-weight="700">5 · Re-run</text>
+        <text x="860" y="124" text-anchor="middle" fill-opacity=".8">a receipt anyone</text>
+        <text x="860" y="144" text-anchor="middle" fill-opacity=".8">can recompute;</text>
+        <text x="860" y="164" text-anchor="middle" fill-opacity=".8">failures kept</text>
+      </g>
+      <g stroke="currentColor" stroke-opacity=".6" stroke-width="2" fill="none">
+        <path d="M190 125 H213"/><path d="M385 125 H408"/><path d="M580 125 H603"/><path d="M765 125 H788"/>
+      </g>
+      <text x="480" y="220" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity=".7" font-family="ui-monospace, monospace">no AI model is asked to judge — the same input always gives the same verdict</text>
+    </svg>
+  </div>
+  <p class="plain">The tests behind each tool are themselves tested: a mutation gate breaks the code on purpose, one small change at a time, and the build fails unless the tests catch every break. GitHub re-runs that gate on every change, so the green is not our word.</p>
+</section>
+
+<section id="check">
+  <h2>Check it yourself, without us</h2>
+  <p class="plain">Every claim on this page can be tested without our help, without an account, and without telling us you are looking.</p>
+  <div class="grid">
+    <div class="card"><h3>That nothing leaves</h3>
+      <p><b>Watch it.</b> Open any tool page, open your browser’s developer tools on the Network tab, and use the tool. The only requests are for the page’s own files, from its own address. What you paste is checked in your browser, on your machine, and is not sent anywhere.</p>
+      <p><b>Read it.</b> Every tool is public and MIT-licensed, and each page is its own code, with no scripts loaded from other sites. The one exception is our front door, which downloads an in-browser AI model only if you ask it to.</p>
+      <p><b>Lock it.</b> These pages also carry a browser security policy that forbids calls to any other server, and our CI checks each live page on every change and fails if one loses it:</p>
+      <ul id="guarded">
+        <li><a href="https://sjgant80-hub.github.io/break-it/">The signed-message door (BREAK IT)</a></li>
+        <li><a href="https://sjgant80-hub.github.io/liveware/">Liveware</a></li>
+        <li><a href="https://sjgant80-hub.github.io/kar-scopeguard/">ScopeGuard</a> — no connections at all</li>
+        <li><a href="https://sjgant80-hub.github.io/bes-inward/">Behavioural Entropy Signatures, inward</a></li>
+        <li><a href="https://www.ai-nativesolutions.com/">Our front door</a> — its own address, plus the hosts it downloads the optional model from</li>
+      </ul>
+      <p><b>Host it.</b> Every tool page is a static site. Copy it and serve it from inside your own network, and no outside server is involved at all.</p>
+    </div>
+    <div class="card"><h3>That the tests are real</h3>
+      <p>The mutation gate, witness, is itself public and MIT-licensed. GitHub’s machines run it on every change to every tool here, and the run logs are public, so the green is GitHub’s record, not our word.</p>
+      <p>You can run the same gate on your own machine. The exact commands are in each tool’s CI file (<span class="mono">.github/workflows</span>): the same ones GitHub runs.</p>
+      <p class="note">No third-party security audit or certification is claimed.</p>
+    </div>
+    <div class="card"><h3>That a verdict is right</h3>
+      <p>Each check is plain code with no AI model inside it, so the same input always gives the same verdict. Run it on your own machine, with your own input, and compare. You need no account, no key, and no call to us.</p>
+    </div>
+    <div class="card"><h3>What your auditors get</h3>
+      <p>The source of every tool. GitHub’s public run log for every change. The mutation record: how many deliberate breaks the gate made, and that every one was caught, with any exception written down with its reason. And the commands to re-run all of it themselves.</p>
+    </div>
+  </div>
+</section>
+
+<section id="blueprint">
+  <h2>The blueprint, tool by tool</h2>
+  <p class="plain">What each piece is, what it does, and the limit it states about itself. Every name links to the live tool.</p>
+  <div class="grid" id="organs"></div>
+</section>
+
+<section id="rules">
+  <h2>The rules we work by</h2>
+  <p class="plain">These are not small print. They are what a regulated buyer checks first, and they are why the tools are safe to run inside your walls.</p>
+  <ul class="rules">
+    <li><b>Defensive first.</b> We build tools that protect systems. That is the whole catalogue above.</li>
+    <li><b>Scope and authorization on every testing tool.</b> Anything that tests an attack runs only against your own systems, or a target you have authorized in writing. When those tools ship, each will refuse to run without a recorded authorization and target scope, and will print that scope on every result.</li>
+    <li><b>Responsible disclosure.</b> If we find a weakness in someone else’s software, the maintainer hears first, privately, before any public write-up.</li>
+    <li><b>No tools for defeating AI safety.</b> Nothing we supply, to anyone, is built to get around an AI system’s safety measures. Our red-team work tests only your own systems, with your written permission, and what it finds goes to you. Trust is what you are buying; we will not sell the opposite.</li>
+    <li><b>Sovereign by architecture.</b> The checks are code that runs on your device — in your browser, or on servers you run — so there is nowhere for your data to be sent. You can watch that, and lock it: see <a href="#check">Check it yourself</a>.</li>
+    <li><b>Proven, not trusted.</b> Claims are checked before they are made, the checks are re-run on independent machines, and what failed stays on the record.</li>
+  </ul>
+</section>
+
+<section id="roles">
+  <h2>What it does for your team</h2>
+  <div class="grid">
+    <div class="card"><h3>Chief executive</h3><p>A security story you can show the board: every claim can be re-run, and the failures are published rather than hidden.</p></div>
+    <div class="card"><h3>Finance</h3><p>You own the code outright (MIT), so there is no per-seat security subscription to keep paying. The cost case for your environment is measured in the audit, against what you spend now — we do not print a figure we have not measured for you.</p></div>
+    <div class="card"><h3>Security lead</h3><p>Deterministic checks with no model judging, each verdict with a receipt you can recompute, running on machines you control. Testing tools carry their authorization on every run.</p></div>
+    <div class="card"><h3>Compliance and data protection</h3><p>Data stays on machines you control. Every refusal names its reason, which gives you an audit trail. Released figures can be gated against re-identification.</p></div>
+    <div class="card"><h3>Engineering lead</h3><p>It drops into what you already run: a command line, a GitHub Action, a Claude Code hook. Each tool is small enough to read in an afternoon.</p></div>
+    <div class="card"><h3>The board</h3><p>A supplier that publishes what failed is one you can audit before you sign.</p></div>
+  </div>
+</section>
+
+<section id="security">
+  <h2>Security and compliance, answered straight</h2>
+  <div class="card scroll"><table>
+    <tbody>
+      <tr><th scope="row">Where does our data go?</th><td>Nowhere you have not chosen. Every tool can run entirely on your own machines, and none sends anything to us or to a model provider. If you use ScopeGuard as a GitHub Action, it runs where your code already lives. Our own front door shows a live network ledger of what it fetched and sent: nothing is sent up. <a href="#check">How to check that yourself.</a></td></tr>
+      <tr><th scope="row">Is an AI model judging?</th><td>No. The checks are deterministic: the same input gives the same verdict, with a receipt anyone can recompute.</td></tr>
+      <tr><th scope="row">How do we know the checks work?</th><td>Each tool’s tests are broken on purpose by a mutation gate and must catch every break. GitHub re-runs it on every change, and the logs are public. The gate itself is public, so you can run it yourself.</td></tr>
+      <tr><th scope="row">What about attack tools?</th><td>Anything that tests attacks runs only on your own systems or an authorized target, with the authorization recorded. Nothing we supply, to anyone, is built to get around an AI system’s safety measures.</td></tr>
+      <tr><th scope="row">If you find a flaw in someone else’s software?</th><td>The maintainer hears first, privately, before anything is published.</td></tr>
+      <tr><th scope="row">Is it certified?</th><td>No certification or third-party audit is claimed. Your auditors get the source, GitHub’s public run logs, the mutation record and the commands to re-run it all, and we will show them anything else they ask to see. See <a href="#check">Check it yourself</a>.</td></tr>
+      <tr><th scope="row">Who supports it, and what if you disappear?</th><td>AI Native Solutions, on terms agreed in each deployment’s agreement. The code is MIT: you keep it, and it keeps running without us.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="risks">
+  <h2>The risks, answered straight</h2>
+  <ul class="rules">
+    <li><b>These are building blocks, not a managed security operations centre.</b> You still need people watching.</li>
+    <li><b>Each check verifies exactly what it says, and no more.</b> The limit of every tool is printed beside it above.</li>
+    <li><b>Behavioural detection needs time to learn what normal looks like</b> for each identity before it can flag the abnormal.</li>
+    <li><b>“Sovereign” is an architecture property</b> you can watch working, not a hardware enclave.</li>
+    <li><b>Some threats on the map are not covered yet.</b> They are named, not claimed.</li>
+  </ul>
+</section>
+
+<section id="next">
+  <h2>Not built yet</h2>
+  <p class="plain">Named so you can plan around them, and so nothing here is mistaken for a claim.</p>
+  <ul class="rules">
+    <li><b>Log triage</b> for floods of SIEM and EDR alerts, on our verified-pattern engine, run on your own logs.</li>
+    <li><b>An incident-response agent</b> for your own hosts.</li>
+    <li><b>A broker for short-lived agent credentials</b> across many services (the capability checkpoint it builds on is live).</li>
+    <li><b>Automatic revocation</b> when behaviour flags a stolen credential (the detection is live).</li>
+    <li><b>Vulnerability research</b> in the open-source AI frameworks you depend on — disclosure first.</li>
+    <li><b>Scoped testing tools</b> — a fuzzer for your own code, robustness hardening for your own models, monitoring for your own leaked credentials — shipped only with the authorization-and-scope gate built in from the first line.</li>
+  </ul>
+</section>
+
+<section id="paper">
+  <h2>Why a security product should be provable</h2>
+  <p class="plain">Agents created a new attack surface faster than the tools to defend it. The common answer is another model, asked to judge whether the first one is behaving. That moves the problem rather than solving it: now you must trust the judge.</p>
+  <p class="plain">The answer here is older and plainer. Verify before you trust: check the signature before you parse the message, the capability before you act, the characters before the agent reads them, the tests before you merge. Make each check deterministic, so the same input always gives the same verdict. Run it on your own hardware, so nothing sensitive travels. Then prove the checks themselves — break the code on purpose and require the tests to notice — and publish the record, failures included.</p>
+  <p class="plain">None of this makes an organisation safe on its own. It makes the safety claims checkable, which is the thing a regulated buyer has never been able to get from an AI vendor.</p>
+</section>
+
+<section id="start">
+  <h2>How to start</h2>
+  <ol class="steps">
+    <li><b>An audit of one surface.</b> We measure how it is protected today, so there is something honest to beat.</li>
+    <li><b>Secure that surface.</b> The right tool, wired into your stack, with a receipt you can re-run.</li>
+    <li><b>Keep it current.</b> Fresh receipts as your agents and code change.</li>
+  </ol>
+  <p class="plain">Terms are agreed per engagement, in person. Start from our public site:</p>
+  <a class="cta" href="https://www.ai-nativesolutions.com/#start">Start at ai-nativesolutions.com</a>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <p><b>Supplier:</b> <a href="https://www.ai-nativesolutions.com/">AI Native Solutions</a>. Built by Kar. Licence: MIT, © Simon Gant. Support and liability are agreed in each deployment’s agreement.</p>
+  <p><b>Credits.</b> Liveware’s LIGHT codec: Powered by the Konomi architecture, created by Thomas Frumkin. The behavioural detection builds on Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — “GEP-Based Security: Behavioral Entropy Signatures for Cybersecurity and DevOps,” 2025 (CC BY 4.0); and Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — “Bayesian Entropy Similarity (BES): Alignment Salience for Entropy-Regulated AI Systems,” Technical Report, December 2025 (MIT, defensive prior art).</p>
+  <p class="mono">Every tool linked here is public, MIT-licensed, and re-run by CI on every change. This page holds no prices.</p>
+</div></footer>
+
+<script>
+/*KERNEL:BEGIN*/
+const STATUS = Object.freeze({ BUILT: 'built', PARTIAL: 'partial', NEXT: 'next' });
+
+const ORGANS = Object.freeze({
+  door: Object.freeze({ name: 'The signed-message door (BREAK IT)', url: 'https://sjgant80-hub.github.io/break-it/',
+    does: 'Verifies every message on its raw bytes — Ed25519 signature, counter, exact layout — before anything parses it. Forgeries are refused and remembered by a living immune system; an independent referee keeps score.',
+    limit: 'A signed-message gateway. Putting it in front of a particular MCP server is the deployment work, not a packaged proxy yet.' }),
+  liveware: Object.freeze({ name: 'Liveware', url: 'https://sjgant80-hub.github.io/liveware/',
+    does: 'A whole living system you verify in your own browser in ten minutes, including a self-defending door under a sealed attack test you re-run yourself.',
+    limit: 'A demonstration system you can re-run end to end; it is not your production stack.' }),
+  scopeguard: Object.freeze({ name: 'ScopeGuard', url: 'https://sjgant80-hub.github.io/kar-scopeguard/',
+    does: 'Flags an AI coding agent that skipped, loosened, deleted or neutered tests, told CI to ignore failures, or edited files outside its task — each with its line. CLI, GitHub Action and a Claude Code hook.',
+    limit: 'Judges the honesty of a diff’s tests and scope. It is not a full static analyser or a software bill of materials.' }),
+  witness: Object.freeze({ name: 'The mutation gate (witness)', url: 'https://sjgant80-hub.github.io/witness/',
+    does: 'Breaks your code on purpose, one small change at a time, and fails unless your tests notice every break.',
+    limit: 'Proves the tests notice changes; it does not prove the code is right for a case nobody tested.' }),
+  glyphguard: Object.freeze({ name: 'GlyphGuard', url: 'https://sjgant80-hub.github.io/kar-glyphguard/',
+    does: 'Finds invisible characters, homoglyphs, bidi overrides, hidden Unicode-tag payloads (ASCII smuggling) and fullwidth evasion in text an agent is about to read.',
+    limit: 'Finds the characters and names them; deciding intent stays with you.' }),
+  conform: Object.freeze({ name: 'Conform', url: 'https://sjgant80-hub.github.io/kar-conform/',
+    does: 'Checks AI structured output against your JSON Schema: PASS or FAIL, with the exact path of every violation.',
+    limit: 'Checks the schema you give it; a wrong value that is still valid passes.' }),
+  canon: Object.freeze({ name: 'Canon', url: 'https://sjgant80-hub.github.io/kar-canon/',
+    does: 'Proves two JSON documents are byte-identical after canonical form (RFC 8785-aligned), or shows exactly where they diverge.',
+    limit: 'Proves two documents are the same; not that either one is true.' }),
+  citelock: Object.freeze({ name: 'CiteLock', url: 'https://sjgant80-hub.github.io/kar-citelock/',
+    does: 'Checks that a claimed quote is verbatim in the source: VERIFIED, NEAR MATCH or NOT FOUND, with a receipt anyone can recompute.',
+    limit: 'Exact text only; a faithful paraphrase is reported, not confirmed.' }),
+  shingle: Object.freeze({ name: 'Shingle', url: 'https://sjgant80-hub.github.io/kar-shingle/',
+    does: 'Near-duplicate detection (word shingling and MinHash) that catches disguised copies, with a verdict you can re-derive.',
+    limit: 'Measures similar wording, not similar meaning.' }),
+  bes: Object.freeze({ name: 'Behavioural Entropy Signatures, inward', url: 'https://sjgant80-hub.github.io/bes-inward/',
+    does: 'Catches a hijacked or scripted session by how it behaves, even when the credential is valid. After Gary W. Floyd’s Behavioral Entropy Signatures.',
+    limit: 'Learns each identity’s normal behaviour first; it is a behavioural signal, not proof.' }),
+  perimeter: Object.freeze({ name: 'Perimeter Post', url: 'https://sjgant80-hub.github.io/perimeter-post/',
+    does: 'An operator-issued capability — who may do what, within what budget, until when — verified before anything is acted on.',
+    limit: 'A capability checkpoint for one hub. A broker issuing short-lived credentials across many services is the next build.' }),
+  isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/',
+    does: 'Blocks the differencing attack: two released totals that subtract to one person’s data.',
+    limit: 'Built on the membership of the released sets; it is not differential privacy.' }),
+  sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/',
+    does: 'Every tool runs on your device — in your browser, or on servers you run — and none sends what you give it to us or to a model provider. Open any tool page with your browser’s Network tab and watch: the only requests are for the page’s own files. Our own front door shows a live network ledger of what it fetched and what it sent — nothing is sent up.',
+    limit: 'An architecture property you can watch, not a hardware enclave (TEE or SGX).' }),
+});
+
+const THREATS = Object.freeze([
+  Object.freeze({ id: 'poisoned-message', threat: 'A forged or poisoned message reaches an agent (the MCP tool-poisoning class)', status: STATUS.BUILT, organs: Object.freeze(['door', 'liveware']), note: 'The gateway is built and attacked in the open; wiring it in front of your own MCP servers is the engagement.' }),
+  Object.freeze({ id: 'fake-green', threat: 'An AI coding agent fakes a passing build', status: STATUS.BUILT, organs: Object.freeze(['scopeguard', 'witness']), note: 'Runs on every pull request, in your own CI.' }),
+  Object.freeze({ id: 'smuggled-text', threat: 'Hidden instructions are smuggled into text an agent reads', status: STATUS.BUILT, organs: Object.freeze(['glyphguard']), note: 'Scan before the agent reads it.' }),
+  Object.freeze({ id: 'bad-output', threat: 'AI output breaks the format your systems trust', status: STATUS.BUILT, organs: Object.freeze(['conform', 'canon']), note: 'Check it before it enters a system of record.' }),
+  Object.freeze({ id: 'fabricated-citation', threat: 'An answer cites a source that does not say it', status: STATUS.BUILT, organs: Object.freeze(['citelock']), note: 'Every quote checked against the source you supply.' }),
+  Object.freeze({ id: 'disguised-copy', threat: 'Disguised copies slip past review', status: STATUS.BUILT, organs: Object.freeze(['shingle']), note: 'A re-derivable similarity verdict, no model judging.' }),
+  Object.freeze({ id: 'stolen-credential', threat: 'A stolen but valid credential is used', status: STATUS.PARTIAL, organs: Object.freeze(['bes']), note: 'Behavioural detection is built; automatic revocation on detection is the next step.' }),
+  Object.freeze({ id: 'over-reach', threat: 'An agent acts beyond what it was allowed', status: STATUS.PARTIAL, organs: Object.freeze(['perimeter']), note: 'The capability checkpoint is built; a multi-service broker with short-lived credentials is next.' }),
+  Object.freeze({ id: 'reidentification', threat: 'Released figures re-identify a person', status: STATUS.BUILT, organs: Object.freeze(['isolation']), note: 'A release gate in front of any published totals.' }),
+  Object.freeze({ id: 'data-leaves', threat: 'Sensitive data leaves the building', status: STATUS.BUILT, organs: Object.freeze(['sovereign']), note: 'Nothing you give the tools is sent to us or to a model provider — and you can check that yourself without us.' }),
+  Object.freeze({ id: 'untested-system', threat: 'You need proof your own system resists attack before you ship', status: STATUS.BUILT, organs: Object.freeze(['door', 'witness']), note: 'Always scoped to your own systems, with your authorization on record.' }),
+  Object.freeze({ id: 'alert-flood', threat: 'A flood of SIEM or EDR alerts needs triage', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: log triage on our verified-pattern engine, run on your own logs.' }),
+  Object.freeze({ id: 'incident', threat: 'An incident on your own hosts needs a response', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: an incident-response agent for your own hosts.' }),
+  Object.freeze({ id: 'framework-vulns', threat: 'The open-source AI frameworks you depend on have vulnerabilities', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: research with responsible disclosure first, then the public write-up.' }),
+]);
+
+const RECEIPT = /^https:\/\/(sjgant80-hub\.github\.io|www\.ai-nativesolutions\.com)\//;
+const arr = (x) => (Array.isArray(x) ? x : []);
+const isObj = (x) => x !== null && typeof x === 'object';
+
+// organ(id, organs) → { id, name, url, does, limit } for a known organ, else null (own keys only, never the prototype)
+function organ(id, organs = ORGANS) {
+  if (typeof id !== 'string' || !isObj(organs) || !Object.prototype.hasOwnProperty.call(organs, id) || !isObj(organs[id])) return null;
+  return { id, ...organs[id] };
+}
+
+// cover(id, threats) → the threat, its status, the organs that cover it (with receipts and limits) and the note;
+// or a refusal. threats defaults to this page's map.
+function cover(id, threats = THREATS, organs = ORGANS) {
+  if (typeof id !== 'string') return { ok: false, why: 'pick a threat from the map' };
+  const t = arr(threats).find((x) => isObj(x) && x.id === id);
+  if (!t) return { ok: false, why: 'that threat is not on this map' };
+  return { ok: true, id: t.id, threat: t.threat, status: t.status, organs: arr(t.organs).map((x) => organ(x, organs)).filter(Boolean), note: t.note };
+}
+
+// tally(threats) → how many threats are built, partial and next, out of the total
+function tally(threats = THREATS) {
+  const list = arr(threats);
+  const out = { built: 0, partial: 0, next: 0, total: list.length };
+  for (const t of list) {
+    if (!isObj(t)) continue;
+    if (t.status === STATUS.BUILT) out.built++;
+    else if (t.status === STATUS.PARTIAL) out.partial++;
+    else if (t.status === STATUS.NEXT) out.next++;
+  }
+  return out;
+}
+
+// receiptsOk(threats) → true only if every built or partial threat has at least one organ, each with a receipt on a
+// live estate page and a stated limit, and every next threat claims no organ at all (named, never claimed). An empty
+// or malformed map proves nothing, so it is refused.
+function receiptsOk(threats = THREATS, organs = ORGANS) {
+  const list = arr(threats);
+  if (list.length === 0) return false;
+  for (const t of list) {
+    if (!isObj(t) || !Array.isArray(t.organs)) return false;
+    const os = t.organs.map((x) => organ(x, organs));
+    if (t.status === STATUS.NEXT) {
+      if (os.length > 0) return false;
+      continue;
+    }
+    if (t.status !== STATUS.BUILT && t.status !== STATUS.PARTIAL) return false;
+    if (os.length === 0) return false;
+    for (const o of os) {
+      if (o === null || typeof o.url !== 'string' || !RECEIPT.test(o.url) || typeof o.limit !== 'string' || o.limit.length === 0) return false;
+    }
+  }
+  return true;
+}
+/*KERNEL:END*/
+const K = { STATUS, ORGANS, THREATS, organ, cover, tally, receiptsOk };
+
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, props, ...kids) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...kids); return n; };
+  const LABEL = { built: 'Built', partial: 'Partly built', next: 'Not yet' };
+  const badge = (s) => el('span', { className: 'badge s-' + s, textContent: LABEL[s] || s });
+
+  // theme: the visitor's choice wins over the system's, remembered if storage allows
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('sas-theme'); if (t === 'light' || t === 'dark') root.setAttribute('data-theme', t); } catch (e) { /* no storage */ }
+  $('theme').addEventListener('click', () => {
+    const now = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = now === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('sas-theme', next); } catch (e) { /* no storage */ }
+  });
+
+  // the tally, straight from the checked map
+  const t = K.tally();
+  $('tally').append(
+    el('span', { className: 's-built', textContent: t.built + ' built' }),
+    el('span', { className: 's-partial', textContent: t.partial + ' partly built' }),
+    el('span', { className: 's-next', textContent: t.next + ' not yet' }));
+  $('tally-line').textContent = t.built + ' of the ' + t.total + ' threats on this map are covered today by a tool that is live and re-tested on every change; '
+    + t.partial + ' more are partly covered; ' + t.next + ' are named as not yet built and claimed for nothing.'
+    + (K.receiptsOk() ? '' : ' (A receipt check failed: treat this page as unverified.)');
+
+  // the map
+  const rows = $('map-rows');
+  for (const th of K.THREATS) {
+    const c = K.cover(th.id);
+    const links = c.organs.length
+      ? c.organs.flatMap((o, i) => [i ? ', ' : '', el('a', { href: o.url, textContent: o.name })])
+      : [el('span', { className: 'note', textContent: '— nothing claimed' })];
+    rows.append(el('tr', {}, el('td', { textContent: th.threat }), el('td', {}, badge(th.status)), el('td', {}, ...links)));
+  }
+
+  // the picker
+  const picker = $('picker'), answer = $('answer');
+  const show = (id) => {
+    const c = K.cover(id);
+    picker.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+    if (!c.ok) { answer.replaceChildren(el('p', { textContent: c.why })); return; }
+    const parts = [el('p', {}, badge(c.status), ' ', el('b', { textContent: c.threat })), el('p', { className: 'note', textContent: c.note })];
+    if (!c.organs.length) parts.push(el('p', { textContent: 'No tool is claimed for this yet. It is on the list of what we have not built.' }));
+    for (const o of c.organs) {
+      parts.push(el('div', { className: 'organ' },
+        el('h3', {}, el('a', { href: o.url, textContent: o.name + ' — try to break it ↗' })),
+        el('p', { textContent: o.does }),
+        el('p', { className: 'limit' }, el('b', { textContent: 'Its stated limit: ' }), o.limit)));
+    }
+    answer.replaceChildren(...parts);
+  };
+  for (const th of K.THREATS) {
+    picker.append(el('button', { type: 'button', textContent: th.threat, onclick: () => show(th.id) }));
+    picker.lastChild.dataset.id = th.id;
+  }
+  show(K.THREATS[0].id);
+
+  // the blueprint, tool by tool
+  const organs = $('organs');
+  for (const id of Object.keys(K.ORGANS)) {
+    const o = K.organ(id);
+    organs.append(el('div', { className: 'card' },
+      el('h3', {}, el('a', { href: o.url, textContent: o.name })),
+      el('p', { textContent: o.does }),
+      el('p', { className: 'note' }, el('b', { textContent: 'Limit: ' }), o.limit)));
+  }
+})();
+</script>
+</body>
+</html>
