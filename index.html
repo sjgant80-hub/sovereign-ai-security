@@ -114,7 +114,7 @@ pre.cmd { background: var(--bg); border: 1px solid var(--line); border-radius: 8
 
 <section id="map">
   <h2>What we already secure, provably</h2>
-  <p class="plain">Every “built” row links to a live, public tool whose tests are broken on purpose and re-run on GitHub’s machines on every change. Nothing is marked built that is not. The last rows are what we have <em>not</em> built yet — named here, claimed for nothing.</p>
+  <p class="plain">Every “built” row links to a live, public tool whose tests are broken on purpose and re-run on GitHub’s machines on every change. Nothing is marked built that is not: on every change, our CI opens each built row’s tool live and fails unless it answers, its source is public, and its page loads nothing from another site. The last rows are what we have <em>not</em> built yet — named here, claimed for nothing.</p>
   <div class="card scroll"><table>
     <thead><tr><th>The threat</th><th>Status</th><th>Covered by</th></tr></thead>
     <tbody id="map-rows"></tbody>
@@ -170,7 +170,7 @@ pre.cmd { background: var(--bg); border: 1px solid var(--line); border-radius: 8
       <text x="480" y="220" text-anchor="middle" font-size="13" fill="currentColor" fill-opacity=".7" font-family="ui-monospace, monospace">no AI model is asked to judge — the same input always gives the same verdict</text>
     </svg>
   </div>
-  <p class="plain">The tests behind each tool are themselves tested: a mutation gate breaks the code on purpose, one small change at a time, and the build fails unless the tests catch every break. GitHub re-runs that gate on every change, so the green is not our word.</p>
+  <p class="plain">The tests behind each tool are themselves tested: a mutation gate breaks the code on purpose, one small change at a time, and the build fails unless the tests catch every break. GitHub re-runs that gate on every change, so the green is not our word. <a href="#check">Where to see those runs, and how to re-run them yourself.</a></p>
 </section>
 
 <section id="check">
@@ -205,7 +205,7 @@ node ../witness/witness.mjs mutate kernel.mjs --test node --test kernel.test.mjs
       <p>Each check is plain code with no AI model inside it, so the same input always gives the same verdict. Run it on your own machine, with your own input, and compare. You need no account, no key, and no call to us.</p>
     </div>
     <div class="card"><h3>What your auditors get</h3>
-      <p>The source of every tool. GitHub’s public run log for every change. The mutation record: how many deliberate breaks the gate made, and that every one was caught, with any exception written down with its reason. And the commands to re-run all of it themselves.</p>
+      <p>The source of every tool. GitHub’s public run log for every change. The mutation record: how many deliberate breaks the gate made, and that every one was caught. It is printed in each tool’s test-run log on GitHub, and any exception is written down with its reason in the tool’s repository. And the commands to re-run all of it themselves.</p>
     </div>
   </div>
 </section>
