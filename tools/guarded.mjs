@@ -1,7 +1,7 @@
 // sovereign-ai-security · tools/guarded.mjs — the tool pages the live page says are LOCKED by a browser security policy.
 // One list, read by two checks: page-parity.test.mjs holds the page's #guarded list equal to it, and tools/receipts.mjs
 // fetches each live page and fails CI unless its policy still forbids calls to any other server.
-export const GUARDED = Object.freeze(['door', 'liveware', 'scopeguard', 'bes', 'sovereign']);
+export const GUARDED = Object.freeze(['door', 'liveware', 'scopeguard', 'bes', 'alerttriage', 'irhelper', 'sovereign']);
 
 // The front door may download an in-browser AI model, only when the visitor asks for one. These are the only outside
 // hosts its policy may name; every other guarded page may connect to its own address and nothing else.

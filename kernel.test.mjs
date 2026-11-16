@@ -5,8 +5,8 @@ import K from './kernel.mjs';
 
 const { STATUS, ORGANS, THREATS, organ, cover, tally, receiptsOk } = K;
 
-test('the map tallies exactly: 9 built, 2 partial, 3 next, 14 in all', () => {
-  assert.deepEqual(tally(), { built: 9, partial: 2, next: 3, total: 14 });
+test('the map tallies exactly: 11 built, 2 partial, 1 next, 14 in all', () => {
+  assert.deepEqual(tally(), { built: 11, partial: 2, next: 1, total: 14 });
 });
 
 test('every claim on the real map carries a live receipt and a limit; nothing next is claimed', () => {
@@ -35,7 +35,8 @@ test('cover returns the threat, its status, its organs and its note', () => {
   assert.match(c.note, /pull request/);
   assert.equal(cover('stolen-credential').status, 'partial');
   assert.equal(cover('over-reach').status, 'partial');
-  assert.equal(cover('alert-flood').status, 'next');
+  assert.equal(cover('framework-vulns').status, 'next');
+  assert.deepEqual([cover('alert-flood').organs[0].id, cover('incident').organs[0].id], ['alerttriage', 'irhelper']);
   assert.equal(cover('poisoned-message').organs[0].id, 'door');
 });
 

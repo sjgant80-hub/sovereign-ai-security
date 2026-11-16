@@ -43,6 +43,12 @@ export const ORGANS = Object.freeze({
   isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/', src: 'https://github.com/sjgant80-hub/kar-isolationgate',
     does: 'Blocks the differencing attack: two released totals that subtract to one person’s data.',
     limit: 'Built on the membership of the released sets; it is not differential privacy.' }),
+  alerttriage: Object.freeze({ name: 'AlertTriage', url: 'https://sjgant80-hub.github.io/kar-alerttriage/', src: 'https://github.com/sjgant80-hub/kar-alerttriage',
+    does: 'Turns a flood of Wazuh, Suricata or Elastic alerts into a short ranked list of incidents, on your own machine, with no model judging. On a public attack data set the first group was an attack in all eight runs, and CI re-derives every published number from that data.',
+    limit: 'Fewer of its top ten groups are attack than in a severity-sorted queue, because it folds an attack into one incident; it misses DNS exfiltration in that data.' }),
+  irhelper: Object.freeze({ name: 'IR Helper', url: 'https://sjgant80-hub.github.io/kar-irhelper/', src: 'https://github.com/sjgant80-hub/kar-irhelper',
+    does: 'Refuses to start without an authorization naming the host, collects read-only evidence, finds the tell-tale facts and proposes each step with its exact command and undo. A person approves and runs each one, and every step goes into a hash-chained log.',
+    limit: 'Ten rules on Linux and Windows: it is not an EDR, and its silence is not an all-clear.' }),
   sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/', src: 'https://github.com/sjgant80-hub/ai-nativesolutions',
     does: 'Every tool runs on your device — in your browser, or on servers you run — and none sends what you give it to us or to a model provider. Open any tool page with your browser’s Network tab and watch: the only requests are for the page’s own files. Our own front door shows a live network ledger of what it fetched and what it sent — nothing is sent up.',
     limit: 'An architecture property you can watch, not a hardware enclave (TEE or SGX).' }),
@@ -60,8 +66,8 @@ export const THREATS = Object.freeze([
   Object.freeze({ id: 'reidentification', threat: 'Released figures re-identify a person', status: STATUS.BUILT, organs: Object.freeze(['isolation']), note: 'A release gate in front of any published totals.' }),
   Object.freeze({ id: 'data-leaves', threat: 'Sensitive data leaves the building', status: STATUS.BUILT, organs: Object.freeze(['sovereign']), note: 'Nothing you give the tools is sent to us or to a model provider — and you can check that yourself without us.' }),
   Object.freeze({ id: 'untested-system', threat: 'You need proof your own system resists attack before you ship', status: STATUS.BUILT, organs: Object.freeze(['door', 'witness']), note: 'Always scoped to your own systems, with your authorization on record.' }),
-  Object.freeze({ id: 'alert-flood', threat: 'A flood of SIEM or EDR alerts needs triage', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: log triage on our verified-pattern engine, run on your own logs.' }),
-  Object.freeze({ id: 'incident', threat: 'An incident on your own hosts needs a response', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: an incident-response agent for your own hosts.' }),
+  Object.freeze({ id: 'alert-flood', threat: 'A flood of SIEM or EDR alerts needs triage', status: STATUS.BUILT, organs: Object.freeze(['alerttriage']), note: 'Measured on public attack data, with where it loses published beside where it wins.' }),
+  Object.freeze({ id: 'incident', threat: 'An incident on your own hosts needs a response', status: STATUS.BUILT, organs: Object.freeze(['irhelper']), note: 'It proposes; a person approves and runs each step. Only on hosts you own, with the authorization on record.' }),
   Object.freeze({ id: 'framework-vulns', threat: 'The open-source AI frameworks you depend on have vulnerabilities', status: STATUS.NEXT, organs: Object.freeze([]), note: 'Next: research with responsible disclosure first, then the public write-up.' }),
 ]);
 
