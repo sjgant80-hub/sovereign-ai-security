@@ -7,43 +7,43 @@
 export const STATUS = Object.freeze({ BUILT: 'built', PARTIAL: 'partial', NEXT: 'next' });
 
 export const ORGANS = Object.freeze({
-  door: Object.freeze({ name: 'The signed-message door (BREAK IT)', url: 'https://sjgant80-hub.github.io/break-it/',
+  door: Object.freeze({ name: 'The signed-message door (BREAK IT)', url: 'https://sjgant80-hub.github.io/break-it/', src: 'https://github.com/sjgant80-hub/break-it',
     does: 'Verifies every message on its raw bytes — Ed25519 signature, counter, exact layout — before anything parses it. Forgeries are refused and remembered by a living immune system; an independent referee keeps score.',
     limit: 'A signed-message gateway. Putting it in front of a particular MCP server is the deployment work, not a packaged proxy yet.' }),
-  liveware: Object.freeze({ name: 'Liveware', url: 'https://sjgant80-hub.github.io/liveware/',
+  liveware: Object.freeze({ name: 'Liveware', url: 'https://sjgant80-hub.github.io/liveware/', src: 'https://github.com/sjgant80-hub/liveware',
     does: 'A whole living system you verify in your own browser in ten minutes, including a self-defending door under a sealed attack test you re-run yourself.',
     limit: 'A demonstration system you can re-run end to end; it is not your production stack.' }),
-  scopeguard: Object.freeze({ name: 'ScopeGuard', url: 'https://sjgant80-hub.github.io/kar-scopeguard/',
+  scopeguard: Object.freeze({ name: 'ScopeGuard', url: 'https://sjgant80-hub.github.io/kar-scopeguard/', src: 'https://github.com/sjgant80-hub/kar-scopeguard',
     does: 'Flags an AI coding agent that skipped, loosened, deleted or neutered tests, told CI to ignore failures, or edited files outside its task — each with its line. CLI, GitHub Action and a Claude Code hook.',
     limit: 'Judges the honesty of a diff’s tests and scope. It is not a full static analyser or a software bill of materials.' }),
-  witness: Object.freeze({ name: 'The mutation gate (witness)', url: 'https://sjgant80-hub.github.io/witness/',
+  witness: Object.freeze({ name: 'The mutation gate (witness)', url: 'https://sjgant80-hub.github.io/witness/', src: 'https://github.com/sjgant80-hub/witness',
     does: 'Breaks your code on purpose, one small change at a time, and fails unless your tests notice every break.',
     limit: 'Proves the tests notice changes; it does not prove the code is right for a case nobody tested.' }),
-  glyphguard: Object.freeze({ name: 'GlyphGuard', url: 'https://sjgant80-hub.github.io/kar-glyphguard/',
+  glyphguard: Object.freeze({ name: 'GlyphGuard', url: 'https://sjgant80-hub.github.io/kar-glyphguard/', src: 'https://github.com/sjgant80-hub/kar-glyphguard',
     does: 'Finds invisible characters, homoglyphs, bidi overrides, hidden Unicode-tag payloads (ASCII smuggling) and fullwidth evasion in text an agent is about to read.',
     limit: 'Finds the characters and names them; deciding intent stays with you.' }),
-  conform: Object.freeze({ name: 'Conform', url: 'https://sjgant80-hub.github.io/kar-conform/',
+  conform: Object.freeze({ name: 'Conform', url: 'https://sjgant80-hub.github.io/kar-conform/', src: 'https://github.com/sjgant80-hub/kar-conform',
     does: 'Checks AI structured output against your JSON Schema: PASS or FAIL, with the exact path of every violation.',
     limit: 'Checks the schema you give it; a wrong value that is still valid passes.' }),
-  canon: Object.freeze({ name: 'Canon', url: 'https://sjgant80-hub.github.io/kar-canon/',
+  canon: Object.freeze({ name: 'Canon', url: 'https://sjgant80-hub.github.io/kar-canon/', src: 'https://github.com/sjgant80-hub/kar-canon',
     does: 'Proves two JSON documents are byte-identical after canonical form (RFC 8785-aligned), or shows exactly where they diverge.',
     limit: 'Proves two documents are the same; not that either one is true.' }),
-  citelock: Object.freeze({ name: 'CiteLock', url: 'https://sjgant80-hub.github.io/kar-citelock/',
+  citelock: Object.freeze({ name: 'CiteLock', url: 'https://sjgant80-hub.github.io/kar-citelock/', src: 'https://github.com/sjgant80-hub/kar-citelock',
     does: 'Checks that a claimed quote is verbatim in the source: VERIFIED, NEAR MATCH or NOT FOUND, with a receipt anyone can recompute.',
     limit: 'Exact text only; a faithful paraphrase is reported, not confirmed.' }),
-  shingle: Object.freeze({ name: 'Shingle', url: 'https://sjgant80-hub.github.io/kar-shingle/',
+  shingle: Object.freeze({ name: 'Shingle', url: 'https://sjgant80-hub.github.io/kar-shingle/', src: 'https://github.com/sjgant80-hub/kar-shingle',
     does: 'Near-duplicate detection (word shingling and MinHash) that catches disguised copies, with a verdict you can re-derive.',
     limit: 'Measures similar wording, not similar meaning.' }),
-  bes: Object.freeze({ name: 'Behavioural Entropy Signatures, inward', url: 'https://sjgant80-hub.github.io/bes-inward/',
+  bes: Object.freeze({ name: 'Behavioural Entropy Signatures, inward', url: 'https://sjgant80-hub.github.io/bes-inward/', src: 'https://github.com/sjgant80-hub/bes-inward',
     does: 'Catches a hijacked or scripted session by how it behaves, even when the credential is valid. After Gary W. Floyd’s Behavioral Entropy Signatures.',
     limit: 'Learns each identity’s normal behaviour first; it is a behavioural signal, not proof.' }),
-  perimeter: Object.freeze({ name: 'Perimeter Post', url: 'https://sjgant80-hub.github.io/perimeter-post/',
+  perimeter: Object.freeze({ name: 'Perimeter Post', url: 'https://sjgant80-hub.github.io/perimeter-post/', src: 'https://github.com/sjgant80-hub/perimeter-post',
     does: 'An operator-issued capability — who may do what, within what budget, until when — verified before anything is acted on.',
     limit: 'A capability checkpoint for one hub. A broker issuing short-lived credentials across many services is the next build.' }),
-  isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/',
+  isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/', src: 'https://github.com/sjgant80-hub/kar-isolationgate',
     does: 'Blocks the differencing attack: two released totals that subtract to one person’s data.',
     limit: 'Built on the membership of the released sets; it is not differential privacy.' }),
-  sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/',
+  sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/', src: 'https://github.com/sjgant80-hub/ai-nativesolutions',
     does: 'Every tool runs on your device — in your browser, or on servers you run — and none sends what you give it to us or to a model provider. Open any tool page with your browser’s Network tab and watch: the only requests are for the page’s own files. Our own front door shows a live network ledger of what it fetched and what it sent — nothing is sent up.',
     limit: 'An architecture property you can watch, not a hardware enclave (TEE or SGX).' }),
 });
@@ -66,6 +66,7 @@ export const THREATS = Object.freeze([
 ]);
 
 const RECEIPT = /^https:\/\/(sjgant80-hub\.github\.io|www\.ai-nativesolutions\.com)\//;
+const SOURCE = /^https:\/\/github\.com\/sjgant80-hub\/[a-z0-9-]+$/;
 const arr = (x) => (Array.isArray(x) ? x : []);
 const isObj = (x) => x !== null && typeof x === 'object';
 
@@ -98,8 +99,8 @@ export function tally(threats = THREATS) {
 }
 
 // receiptsOk(threats) → true only if every built or partial threat has at least one organ, each with a receipt on a
-// live estate page and a stated limit, and every next threat claims no organ at all (named, never claimed). An empty
-// or malformed map proves nothing, so it is refused.
+// live estate page, a public source repository on the estate and a stated limit, and every next threat claims no organ
+// at all (named, never claimed). An empty or malformed map proves nothing, so it is refused.
 export function receiptsOk(threats = THREATS, organs = ORGANS) {
   const list = arr(threats);
   if (list.length === 0) return false;
@@ -114,6 +115,7 @@ export function receiptsOk(threats = THREATS, organs = ORGANS) {
     if (os.length === 0) return false;
     for (const o of os) {
       if (o === null || typeof o.url !== 'string' || !RECEIPT.test(o.url) || typeof o.limit !== 'string' || o.limit.length === 0) return false;
+      if (typeof o.src !== 'string' || !SOURCE.test(o.src)) return false;
     }
   }
   return true;

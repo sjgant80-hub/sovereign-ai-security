@@ -34,6 +34,25 @@ test('every estate tool the page links is one the kernel claims (no unverified r
   for (const u of linked) assert.ok(organUrls.has(u), 'the page links ' + u + ', which the kernel does not claim');
 });
 
+test('every GitHub link on the page is a tool source the kernel gates, its test runs, or this repository', () => {
+  const allowed = new Set(['https://github.com/sjgant80-hub/sovereign-ai-security', 'https://github.com/sjgant80-hub/sovereign-ai-security/actions']);
+  for (const o of Object.values(K.ORGANS)) { allowed.add(o.src); allowed.add(o.src + '/actions'); }
+  const hrefs = [...page.matchAll(/href="(https:\/\/github\.com\/[^"]+)"/g)].map((m) => m[1]);
+  assert.ok(hrefs.length >= 2, 'the page links the gate and its own runs');
+  for (const u of hrefs) assert.ok(allowed.has(u), 'the page links ' + u + ', which is not a gated source');
+});
+
+test('the run-it-yourself commands are the ones CI runs', () => {
+  const cmd = page.slice(page.indexOf('<pre class="cmd"'), page.indexOf('</pre>'));
+  const ci = readFileSync(new URL('./.github/workflows/gate.yml', import.meta.url), 'utf8');
+  const tests = 'node --test kernel.test.mjs guarded.test.mjs page-parity.test.mjs';
+  assert.ok(cmd.includes(tests) && ci.includes(tests), 'the same test line on the page and in CI');
+  const tag = (ci.match(/--branch (v[0-9.]+) https:\/\/github\.com\/sjgant80-hub\/witness\.git/) || [])[1];
+  assert.ok(tag, 'CI pins a witness tag');
+  assert.ok(cmd.includes('git clone --depth 1 --branch ' + tag + ' https://github.com/sjgant80-hub/witness.git'), 'the page pins the same witness tag as CI');
+  assert.ok(cmd.includes('mutate kernel.mjs --test node --test kernel.test.mjs') && ci.includes('mutate "$1"'), 'the page runs the gate CI runs');
+});
+
 test('no prices, no private notation, the public name only', () => {
   assert.ok(!/[£€]\s?\d|\$\s?\d/.test(text), 'a price on the page');
   assert.ok(!/[κφ◊]/.test(page), 'private notation on the page');

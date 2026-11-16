@@ -74,6 +74,8 @@ td a { white-space: nowrap; }
 footer { border-top: 1px solid var(--line); margin-top: 48px; padding: 24px 0 40px; color: var(--ink-3); font-size: .88rem; }
 footer p { margin: 0 0 8px; max-width: 860px; }
 .mono { font-family: var(--mono); }
+pre.cmd { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: .8rem/1.55 var(--mono); color: var(--ink); overflow-x: auto; white-space: pre; margin: 8px 0; }
+.srcs { font-size: .88rem; color: var(--ink-3); }
 @media (max-width: 780px) { nav.sections { display: none; } }
 @media (max-width: 640px) {
   section { padding-top: 34px; }
@@ -94,7 +96,7 @@ footer p { margin: 0 0 8px; max-width: 860px; }
 
 <section id="what">
   <p class="kicker">AI Native Solutions · built by Kar</p>
-  <h1>We secure the agentic attack surface. Provable, owned, and nothing leaves your building.</h1>
+  <h1>Defensive tools for the agentic attack surface. Each one provable, yours to own, and nothing leaves your building.</h1>
   <p class="lede">AI agents read messages, call tools, write code and produce output your systems trust. Each of those is a new way in. These are defensive tools that check every one of them <b>before</b> it is trusted — on machines you control, with no AI model asked to judge, and with every claim one you can re-run and try to break yourself.</p>
   <p class="plain"><b>In one line:</b> verify before you trust, on machines you control, and publish what failed. <a href="#check">How to check all of that yourself, without us.</a></p>
   <div class="tally" id="tally" aria-live="polite"></div>
@@ -176,8 +178,8 @@ footer p { margin: 0 0 8px; max-width: 860px; }
   <p class="plain">Every claim on this page can be tested without our help, without an account, and without telling us you are looking.</p>
   <div class="grid">
     <div class="card"><h3>That nothing leaves</h3>
-      <p><b>Watch it.</b> Open any tool page, open your browser’s developer tools on the Network tab, and use the tool. The only requests are for the page’s own files, from its own address. What you paste is checked in your browser, on your machine, and is not sent anywhere.</p>
-      <p><b>Read it.</b> Every tool is public and MIT-licensed, and each page is its own code, with no scripts loaded from other sites. The one exception is our front door, which downloads an in-browser AI model only if you ask it to.</p>
+      <p><b>Watch it.</b> Open any tool page and press F12 (Chrome, Edge or Firefox) to open the developer tools. Choose the Network tab, reload the page, then use the tool. Every request listed goes to the page’s own address. What you paste is checked in your browser, on your machine, and never appears in that list, because it is never sent.</p>
+      <p><b>Read it.</b> Every tool is public and MIT-licensed, with its source linked beside it below. No tool page loads anything from another site: no scripts, styles, fonts or images. Our CI checks that on every live page, on every change. The one exception is our front door, which downloads an in-browser AI model only if you ask it to.</p>
       <p><b>Lock it.</b> These pages also carry a browser security policy that forbids calls to any other server, and our CI checks each live page on every change and fails if one loses it:</p>
       <ul id="guarded">
         <li><a href="https://sjgant80-hub.github.io/break-it/">The signed-message door (BREAK IT)</a></li>
@@ -186,11 +188,17 @@ footer p { margin: 0 0 8px; max-width: 860px; }
         <li><a href="https://sjgant80-hub.github.io/bes-inward/">Behavioural Entropy Signatures, inward</a></li>
         <li><a href="https://www.ai-nativesolutions.com/">Our front door</a> — its own address, plus the hosts it downloads the optional model from</li>
       </ul>
-      <p><b>Host it.</b> Every tool page is a static site. Copy it and serve it from inside your own network, and no outside server is involved at all.</p>
+      <p><b>Host it.</b> Each tool page is served straight from the files in its public repository. Copy the repository, serve the folder from inside your own network, and it runs with no internet connection at all.</p>
     </div>
     <div class="card"><h3>That the tests are real</h3>
-      <p>The mutation gate, witness, is itself public and MIT-licensed. GitHub’s machines run it on every change to every tool here, and the run logs are public, so the green is GitHub’s record, not our word.</p>
-      <p>You can run the same gate on your own machine. The exact commands are in each tool’s CI file (<span class="mono">.github/workflows</span>): the same ones GitHub runs.</p>
+      <p>The mutation gate, <a href="https://github.com/sjgant80-hub/witness">witness</a>, is itself public and MIT-licensed. GitHub’s machines run it on every change to every tool here, and the run logs are public (each tool’s “Test runs” link below), so the green is GitHub’s record, not our word.</p>
+      <p>Run it yourself. With git and Node 22 installed, this re-runs this page’s own gate on your machine:</p>
+      <pre class="cmd" tabindex="0">git clone --depth 1 --branch v0.6 https://github.com/sjgant80-hub/witness.git
+git clone --depth 1 https://github.com/sjgant80-hub/sovereign-ai-security.git
+cd sovereign-ai-security
+node --test kernel.test.mjs guarded.test.mjs page-parity.test.mjs
+node ../witness/witness.mjs mutate kernel.mjs --test node --test kernel.test.mjs</pre>
+      <p>The last line breaks the map’s code on purpose, one change at a time, and reports how many breaks the tests caught. Every one must be caught, or the gate fails. Each tool’s repository runs the same gate; the exact commands GitHub runs are in its <span class="mono">.github/workflows</span> file. Compare <a href="https://github.com/sjgant80-hub/sovereign-ai-security/actions">this page’s own test runs on GitHub</a>.</p>
       <p class="note">No third-party security audit or certification is claimed.</p>
     </div>
     <div class="card"><h3>That a verdict is right</h3>
@@ -237,7 +245,7 @@ footer p { margin: 0 0 8px; max-width: 860px; }
   <h2>Security and compliance, answered straight</h2>
   <div class="card scroll"><table>
     <tbody>
-      <tr><th scope="row">Where does our data go?</th><td>Nowhere you have not chosen. Every tool can run entirely on your own machines, and none sends anything to us or to a model provider. If you use ScopeGuard as a GitHub Action, it runs where your code already lives. Our own front door shows a live network ledger of what it fetched and sent: nothing is sent up. <a href="#check">How to check that yourself.</a></td></tr>
+      <tr><th scope="row">Where does our data go?</th><td>Nowhere you have not chosen. Every tool can run entirely on your own machines, and none sends anything to us or to a model provider. If you use ScopeGuard as a GitHub Action, it runs where your code already lives. Our own front door shows a live network ledger of what it fetched and sent: nothing is sent up. We run no server that receives anything: there is no account, no sign-in and no analytics. The pages are static files on GitHub Pages, which, like any web host, sees that a page was loaded, never what you type into it. To avoid even that, host your own copy. <a href="#check">How to check all of this yourself.</a></td></tr>
       <tr><th scope="row">Is an AI model judging?</th><td>No. The checks are deterministic: the same input gives the same verdict, with a receipt anyone can recompute.</td></tr>
       <tr><th scope="row">How do we know the checks work?</th><td>Each tool’s tests are broken on purpose by a mutation gate and must catch every break. GitHub re-runs it on every change, and the logs are public. The gate itself is public, so you can run it yourself.</td></tr>
       <tr><th scope="row">What about attack tools?</th><td>Anything that tests attacks runs only on your own systems or an authorized target, with the authorization recorded. Nothing we supply, to anyone, is built to get around an AI system’s safety measures.</td></tr>
@@ -303,43 +311,43 @@ footer p { margin: 0 0 8px; max-width: 860px; }
 const STATUS = Object.freeze({ BUILT: 'built', PARTIAL: 'partial', NEXT: 'next' });
 
 const ORGANS = Object.freeze({
-  door: Object.freeze({ name: 'The signed-message door (BREAK IT)', url: 'https://sjgant80-hub.github.io/break-it/',
+  door: Object.freeze({ name: 'The signed-message door (BREAK IT)', url: 'https://sjgant80-hub.github.io/break-it/', src: 'https://github.com/sjgant80-hub/break-it',
     does: 'Verifies every message on its raw bytes — Ed25519 signature, counter, exact layout — before anything parses it. Forgeries are refused and remembered by a living immune system; an independent referee keeps score.',
     limit: 'A signed-message gateway. Putting it in front of a particular MCP server is the deployment work, not a packaged proxy yet.' }),
-  liveware: Object.freeze({ name: 'Liveware', url: 'https://sjgant80-hub.github.io/liveware/',
+  liveware: Object.freeze({ name: 'Liveware', url: 'https://sjgant80-hub.github.io/liveware/', src: 'https://github.com/sjgant80-hub/liveware',
     does: 'A whole living system you verify in your own browser in ten minutes, including a self-defending door under a sealed attack test you re-run yourself.',
     limit: 'A demonstration system you can re-run end to end; it is not your production stack.' }),
-  scopeguard: Object.freeze({ name: 'ScopeGuard', url: 'https://sjgant80-hub.github.io/kar-scopeguard/',
+  scopeguard: Object.freeze({ name: 'ScopeGuard', url: 'https://sjgant80-hub.github.io/kar-scopeguard/', src: 'https://github.com/sjgant80-hub/kar-scopeguard',
     does: 'Flags an AI coding agent that skipped, loosened, deleted or neutered tests, told CI to ignore failures, or edited files outside its task — each with its line. CLI, GitHub Action and a Claude Code hook.',
     limit: 'Judges the honesty of a diff’s tests and scope. It is not a full static analyser or a software bill of materials.' }),
-  witness: Object.freeze({ name: 'The mutation gate (witness)', url: 'https://sjgant80-hub.github.io/witness/',
+  witness: Object.freeze({ name: 'The mutation gate (witness)', url: 'https://sjgant80-hub.github.io/witness/', src: 'https://github.com/sjgant80-hub/witness',
     does: 'Breaks your code on purpose, one small change at a time, and fails unless your tests notice every break.',
     limit: 'Proves the tests notice changes; it does not prove the code is right for a case nobody tested.' }),
-  glyphguard: Object.freeze({ name: 'GlyphGuard', url: 'https://sjgant80-hub.github.io/kar-glyphguard/',
+  glyphguard: Object.freeze({ name: 'GlyphGuard', url: 'https://sjgant80-hub.github.io/kar-glyphguard/', src: 'https://github.com/sjgant80-hub/kar-glyphguard',
     does: 'Finds invisible characters, homoglyphs, bidi overrides, hidden Unicode-tag payloads (ASCII smuggling) and fullwidth evasion in text an agent is about to read.',
     limit: 'Finds the characters and names them; deciding intent stays with you.' }),
-  conform: Object.freeze({ name: 'Conform', url: 'https://sjgant80-hub.github.io/kar-conform/',
+  conform: Object.freeze({ name: 'Conform', url: 'https://sjgant80-hub.github.io/kar-conform/', src: 'https://github.com/sjgant80-hub/kar-conform',
     does: 'Checks AI structured output against your JSON Schema: PASS or FAIL, with the exact path of every violation.',
     limit: 'Checks the schema you give it; a wrong value that is still valid passes.' }),
-  canon: Object.freeze({ name: 'Canon', url: 'https://sjgant80-hub.github.io/kar-canon/',
+  canon: Object.freeze({ name: 'Canon', url: 'https://sjgant80-hub.github.io/kar-canon/', src: 'https://github.com/sjgant80-hub/kar-canon',
     does: 'Proves two JSON documents are byte-identical after canonical form (RFC 8785-aligned), or shows exactly where they diverge.',
     limit: 'Proves two documents are the same; not that either one is true.' }),
-  citelock: Object.freeze({ name: 'CiteLock', url: 'https://sjgant80-hub.github.io/kar-citelock/',
+  citelock: Object.freeze({ name: 'CiteLock', url: 'https://sjgant80-hub.github.io/kar-citelock/', src: 'https://github.com/sjgant80-hub/kar-citelock',
     does: 'Checks that a claimed quote is verbatim in the source: VERIFIED, NEAR MATCH or NOT FOUND, with a receipt anyone can recompute.',
     limit: 'Exact text only; a faithful paraphrase is reported, not confirmed.' }),
-  shingle: Object.freeze({ name: 'Shingle', url: 'https://sjgant80-hub.github.io/kar-shingle/',
+  shingle: Object.freeze({ name: 'Shingle', url: 'https://sjgant80-hub.github.io/kar-shingle/', src: 'https://github.com/sjgant80-hub/kar-shingle',
     does: 'Near-duplicate detection (word shingling and MinHash) that catches disguised copies, with a verdict you can re-derive.',
     limit: 'Measures similar wording, not similar meaning.' }),
-  bes: Object.freeze({ name: 'Behavioural Entropy Signatures, inward', url: 'https://sjgant80-hub.github.io/bes-inward/',
+  bes: Object.freeze({ name: 'Behavioural Entropy Signatures, inward', url: 'https://sjgant80-hub.github.io/bes-inward/', src: 'https://github.com/sjgant80-hub/bes-inward',
     does: 'Catches a hijacked or scripted session by how it behaves, even when the credential is valid. After Gary W. Floyd’s Behavioral Entropy Signatures.',
     limit: 'Learns each identity’s normal behaviour first; it is a behavioural signal, not proof.' }),
-  perimeter: Object.freeze({ name: 'Perimeter Post', url: 'https://sjgant80-hub.github.io/perimeter-post/',
+  perimeter: Object.freeze({ name: 'Perimeter Post', url: 'https://sjgant80-hub.github.io/perimeter-post/', src: 'https://github.com/sjgant80-hub/perimeter-post',
     does: 'An operator-issued capability — who may do what, within what budget, until when — verified before anything is acted on.',
     limit: 'A capability checkpoint for one hub. A broker issuing short-lived credentials across many services is the next build.' }),
-  isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/',
+  isolation: Object.freeze({ name: 'IsolationGate', url: 'https://sjgant80-hub.github.io/kar-isolationgate/', src: 'https://github.com/sjgant80-hub/kar-isolationgate',
     does: 'Blocks the differencing attack: two released totals that subtract to one person’s data.',
     limit: 'Built on the membership of the released sets; it is not differential privacy.' }),
-  sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/',
+  sovereign: Object.freeze({ name: 'Sovereign by architecture', url: 'https://www.ai-nativesolutions.com/', src: 'https://github.com/sjgant80-hub/ai-nativesolutions',
     does: 'Every tool runs on your device — in your browser, or on servers you run — and none sends what you give it to us or to a model provider. Open any tool page with your browser’s Network tab and watch: the only requests are for the page’s own files. Our own front door shows a live network ledger of what it fetched and what it sent — nothing is sent up.',
     limit: 'An architecture property you can watch, not a hardware enclave (TEE or SGX).' }),
 });
@@ -362,6 +370,7 @@ const THREATS = Object.freeze([
 ]);
 
 const RECEIPT = /^https:\/\/(sjgant80-hub\.github\.io|www\.ai-nativesolutions\.com)\//;
+const SOURCE = /^https:\/\/github\.com\/sjgant80-hub\/[a-z0-9-]+$/;
 const arr = (x) => (Array.isArray(x) ? x : []);
 const isObj = (x) => x !== null && typeof x === 'object';
 
@@ -394,8 +403,8 @@ function tally(threats = THREATS) {
 }
 
 // receiptsOk(threats) → true only if every built or partial threat has at least one organ, each with a receipt on a
-// live estate page and a stated limit, and every next threat claims no organ at all (named, never claimed). An empty
-// or malformed map proves nothing, so it is refused.
+// live estate page, a public source repository on the estate and a stated limit, and every next threat claims no organ
+// at all (named, never claimed). An empty or malformed map proves nothing, so it is refused.
 function receiptsOk(threats = THREATS, organs = ORGANS) {
   const list = arr(threats);
   if (list.length === 0) return false;
@@ -410,6 +419,7 @@ function receiptsOk(threats = THREATS, organs = ORGANS) {
     if (os.length === 0) return false;
     for (const o of os) {
       if (o === null || typeof o.url !== 'string' || !RECEIPT.test(o.url) || typeof o.limit !== 'string' || o.limit.length === 0) return false;
+      if (typeof o.src !== 'string' || !SOURCE.test(o.src)) return false;
     }
   }
   return true;
@@ -422,6 +432,9 @@ const K = { STATUS, ORGANS, THREATS, organ, cover, tally, receiptsOk };
   const el = (tag, props, ...kids) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...kids); return n; };
   const LABEL = { built: 'Built', partial: 'Partly built', next: 'Not yet' };
   const badge = (s) => el('span', { className: 'badge s-' + s, textContent: LABEL[s] || s });
+  // every tool's public source and its public test runs on GitHub, straight from the gated map
+  const sources = (o) => el('p', { className: 'srcs' },
+    el('a', { href: o.src, textContent: 'Source ↗' }), ' · ', el('a', { href: o.src + '/actions', textContent: 'Test runs on GitHub ↗' }));
 
   // theme: the visitor's choice wins over the system's, remembered if storage allows
   const root = document.documentElement;
@@ -465,7 +478,8 @@ const K = { STATUS, ORGANS, THREATS, organ, cover, tally, receiptsOk };
       parts.push(el('div', { className: 'organ' },
         el('h3', {}, el('a', { href: o.url, textContent: o.name + ' — try to break it ↗' })),
         el('p', { textContent: o.does }),
-        el('p', { className: 'limit' }, el('b', { textContent: 'Its stated limit: ' }), o.limit)));
+        el('p', { className: 'limit' }, el('b', { textContent: 'Its stated limit: ' }), o.limit),
+        sources(o)));
     }
     answer.replaceChildren(...parts);
   };
@@ -482,7 +496,8 @@ const K = { STATUS, ORGANS, THREATS, organ, cover, tally, receiptsOk };
     organs.append(el('div', { className: 'card' },
       el('h3', {}, el('a', { href: o.url, textContent: o.name })),
       el('p', { textContent: o.does }),
-      el('p', { className: 'note' }, el('b', { textContent: 'Limit: ' }), o.limit)));
+      el('p', { className: 'note' }, el('b', { textContent: 'Limit: ' }), o.limit),
+      sources(o)));
   }
 })();
 </script>

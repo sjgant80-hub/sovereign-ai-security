@@ -19,6 +19,7 @@ test('every claim on the real map carries a live receipt and a limit; nothing ne
       assert.ok(c.organs.length >= 1, t.id + ' needs an organ');
       for (const o of c.organs) {
         assert.match(o.url, /^https:\/\/(sjgant80-hub\.github\.io|www\.ai-nativesolutions\.com)\//);
+        assert.match(o.src, /^https:\/\/github\.com\/sjgant80-hub\/[a-z0-9-]+$/, o.id + ' names its public source');
         assert.ok(o.limit.length > 10, o.id + ' states its limit');
         assert.ok(o.does.length > 10, o.id + ' says what it does');
       }
@@ -77,7 +78,7 @@ test('receiptsOk refuses an empty, malformed or dishonest map', () => {
 });
 
 test('receiptsOk refuses an organ whose receipt is off-estate or whose limit is missing', () => {
-  const good = { name: 'g', url: 'https://sjgant80-hub.github.io/g/', does: 'does a thing well', limit: 'a stated limit' };
+  const good = { name: 'g', url: 'https://sjgant80-hub.github.io/g/', src: 'https://github.com/sjgant80-hub/g', does: 'does a thing well', limit: 'a stated limit' };
   const map = [{ id: 'a', status: 'built', organs: ['g'] }];
   assert.equal(receiptsOk(map, { g: good }), true);
   assert.equal(receiptsOk(map, { g: { ...good, url: 'http://evil.example/' } }), false, 'a receipt off the estate is no receipt');
@@ -86,6 +87,13 @@ test('receiptsOk refuses an organ whose receipt is off-estate or whose limit is 
   assert.equal(receiptsOk(map, { g: { ...good, limit: 7 } }), false);
   assert.equal(receiptsOk(map, { g: { ...good, url: 7 } }), false);
   assert.equal(receiptsOk(map, { g: 'not an organ' }), false);
+  const { src, ...nosrc } = good;
+  assert.equal(receiptsOk(map, { g: nosrc }), false, 'an organ with no public source is refused');
+  assert.equal(receiptsOk(map, { g: { ...good, src: 7 } }), false);
+  assert.equal(receiptsOk(map, { g: { ...good, src: 'https://github.com/someone-else/g' } }), false, 'source off the estate is refused');
+  assert.equal(receiptsOk(map, { g: { ...good, src: 'https://github.com/sjgant80-hub/g/../x' } }), false, 'a path trick is refused');
+  assert.equal(receiptsOk(map, { g: { ...good, src: 'xhttps://github.com/sjgant80-hub/g' } }), false, 'the source must start at https');
+  assert.equal(receiptsOk(map, { g: { ...good, src: src + '-extra' } }), true, 'any estate repo name is a source');
   assert.equal(receiptsOk(map, null), false);
   assert.equal(receiptsOk([{ id: 'a', status: 'built', organs: ['sovereign'] }]), true, 'the front door is an estate receipt');
   assert.equal(organ('g', { g: good }).url, good.url);
